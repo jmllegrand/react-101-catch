@@ -26,3 +26,26 @@ a component has:
 
 virtual DOM : anytime you change the data associated to component, it immedially refresh the dom wo 
 reloading the whole page
+
+
+
+#### Session 3
+
+react first component using 
+
+- React.createClass
+```
+var StorePicker = React.createClass({
+  render : function() {
+    return (
+      <p>hello</p>
+    )
+  }
+});
+```
+
+- ReactDOM to decouple the specifics browser from the react library
+
+```
+ReactDOM.render(<StorePicker/>, document.querySelector('#main'));
+```
