@@ -163,3 +163,43 @@ To come:
 
 - *spread* is a technique used to pass all the properties from a parent level to the child components
 - *proptype* is a technique to validate the properties are of the right types
+
+
+#### Session 7: Routing
+
+Use case : 
+
+- when hitting http://localhost:3000/, display StorePicker
+- when hitting http://localhost:3000/store/storeName, display App dedicated to the storeName (wo page reload)
+- when hitting 404 url, display a 404 page
+
+Expectations: routing is done in client side 
+
+react-router is the industry standard
+
+
+Components needed from react-router
+- Router
+- Route
+- Navigation : allows us to change the url wo reloading the page 
+
+You declare Routes with JSX
+
+You supply each Route 
+
+- with a path that should matched
+- the component that should be displayed when the path is matched 
+```
+    <Route path="/" component={StorePicker}/>
+```
+##### Notes
+
+*Notion of ?_k in the url*
+
+react-router is trying to maintain state to let the user use the back & forward button. 
+Technically, we are not changing the page but only the url
+```
+http://localhost:3000/#/?_k=ofeyrj
+```
+*Notion of push state*
+Regarding the hash #, all the browsers don't support push state. It lets update the URL bar wo reloading the page
