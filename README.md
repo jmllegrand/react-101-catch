@@ -231,3 +231,78 @@ Good
 ```
 <input type="text" defaultValue={utils.getFunName()} required/>
 ```
+
+- to execute tests via npm
+
+```
+npm test
+```
+
+- to execute tests via gulp 
+```
+gulp test
+```
+
+
+#### Session 9: Events
+
+Use case: when a user click on the Submit of the StorePicker 
+
+- Define the event watched
+```
+  render: function () {
+    var name = "JM";
+    return (
+      <form className="store-selector" onSubmit={this.handleSubmit}>
+        <h2>{name}, please enter a store ID</h2>
+        <input type="text" defaultValue={utils.getFunName()} required/>
+        <input type="Submit" />
+      </form>
+    )
+    
+```
+
+- Implement the event
+
+```
+  handleSubmit: function() {
+    console.log('in handleSubmit()');
+  }
+```
+
+
+- Get data from the input (need to get out of the DOM!)
+
+We need to add the ref attribute on the input to reference the input anywhere in the component
+
+```
+      <form className="store-selector" onSubmit={this.handleSubmit}>
+        <input type="text" ref="storeId" defaultValue={utils.getFunName()} required/>
+        <input type="Submit" />
+      </form>
+```
+
+To access the data, we use this.refs
+
+```
+    //get the data from the input
+    var storeId = this.refs.storeId.value;
+    
+```
+
+
+Use case: programatically, force the change of the url
+
+
+##### Tips & Good practices
+
+For a form, by default, it reload the page 
+
+To avoid this behavior, we need to prevent the form being submitting
+```
+  handleSubmit: function(event) {
+    event.preventDefault();
+    console.log('in handleSubmit()');
+  }
+```
+
