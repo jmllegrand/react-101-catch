@@ -121,3 +121,45 @@ Create application layout
   }
 ```
 
+#### Session 6
+To create the component dynamic, use of  props
+
+Props are equivalent to attributes in html tags elements
+
+- To define the props
+```
+  render: function () {
+    return (
+      <div className="catch-of-the-day">
+        <div className="menu">
+          <Header tagline="Fresh Seafood Market"/>
+        </div>
+      </div>
+    )
+  }
+```
+
+- To acesss the props
+```
+var Header = React.createClass({
+  render: function () {
+    return (
+      <div>
+        <p>Welcome to {this.props.tagline}</p>
+      </div>
+    )
+  }
+});
+```
+
+*this* refers to the constructor, ie the Header function
+*this.props* is an object referring to all the props defined for the given component
+```
+{
+    tagline: "Fresh Seafood Market"
+}
+```
+To come: 
+
+- *spread* is a technique used to pass all the properties from a parent level to the child components
+- *proptype* is a technique to validate the properties are of the right types
