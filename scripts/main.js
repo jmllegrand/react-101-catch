@@ -7,7 +7,7 @@ var ReactDOM = require('react-dom');
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
-var createBrowserHistory = require('history/lib/createBrowserHistory');
+var browserHistory = ReactRouter.browserHistory;
 
 
 var App = React.createClass({
@@ -90,7 +90,7 @@ var NotFound = React.createClass({
 });
 
 var routes = (
-  <Router history={createBrowserHistory()}>
+  <Router history={browserHistory}>
     <Route path="/" component={StorePicker}/>
     <Route path="/store/:storeId" component={App}/>
     <Route path="*" component={NotFound}/>
