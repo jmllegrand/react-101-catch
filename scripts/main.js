@@ -9,6 +9,7 @@ var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var browserHistory = ReactRouter.browserHistory;
 
+var utils = require('./helpers');
 
 var App = React.createClass({
   render: function () {
@@ -74,7 +75,7 @@ var StorePicker = React.createClass({
       <form className="store-selector">
         {/* comment goes in it */}
         <h2>{name}, please enter a store ID</h2>
-        <input type="text" required/>
+        <input type="text" defaultValue={utils.getFunName()} required/>
         <input type="Submit"/>
       </form>
     )

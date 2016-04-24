@@ -203,3 +203,31 @@ http://localhost:3000/#/?_k=ofeyrj
 ```
 *Notion of push state*
 Regarding the hash #, all the browsers don't support push state. It lets update the URL bar wo reloading the page
+
+
+#### Session 8: Utility
+
+To get utility function
+
+```
+var utils = require('./helpers');
+```
+
+##### Tips & Good practices
+
+- Avoid using value for a mutable field 
+
+Bad
+```
+<input type="text" value={utils.getFunName()} required/>
+```
+
+Good
+```
+<input type="text" defaultValue={utils.getFunName()} required/>
+```
+
+- any use of curly bracket in JSX will run a Javascript expressions
+```
+<input type="text" defaultValue={utils.getFunName()} required/>
+```
