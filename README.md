@@ -44,8 +44,67 @@ var StorePicker = React.createClass({
 });
 ```
 
-- ReactDOM to decouple the specifics browser from the react library
+- ReactDOM to decouple the specifics browser (& the manipulation of the DOM) from the react library
 
 ```
 ReactDOM.render(<StorePicker/>, document.querySelector('#main'));
+```
+
+
+#### Session 4
+Create react components (with static content)
+
+##### JSX syntax
+```
+  render : function() {
+    return (
+      <p>hello</p>
+    )
+  }
+```
+
+##### is equivalent in JS into 
+```
+  render : function() {
+    return React.createElement('p', 'hello');
+  }
+```
+Create application layout 
+
+*Good practices* : 
+
+- Adjacent JSX elements must be wrapped in an enclosing tag 
+- Have expected corresponding JSX closing tag for <input> 
+- Use className instead of class in JSX
+```
+    <form className="store-selector">
+```
+- Use required to specify the field is mandatory 
+```
+   <input type="text" ref="storeId" required/>
+```
+
+- Use of variable name in the component (interpolation)
+```
+  render : function() {
+    var name = "JM";
+    return (
+      <form className="store-selector">
+        <h2>{name}, please enter a store ID</h2>
+      </form>
+    )
+  }
+```
+
+- Use of commments in JSX
+```
+  render : function() {
+    return (
+      <form className="store-selector">
+        {/* comment goes in it */}
+        <input type="text" ref="storeId" required/>
+        <input type="Submit" />
+      </form>
+    )
+  }
 ```
