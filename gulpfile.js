@@ -1,8 +1,10 @@
 var source = require('vinyl-source-stream');
 var gulp = require('gulp');
+var plug = require('gulp-load-plugins')({ lazy: true });
 var gutil = require('gulp-util');
 var browserify = require('browserify');
 var babelify = require('babelify');
+var babel = require('babel-core/register');
 var watchify = require('watchify');
 var notify = require('gulp-notify');
 
@@ -103,6 +105,17 @@ function buildScript(file, watch) {
 gulp.task('scripts', function() {
   return buildScript('main.js', false); // this will run once because we set watch to false
 });
+
+
+gulp.task('test', function () {
+  return gulp.src('./scripts/**/*.spec.js' , { read: false })
+    .pipe(plug.mocha({
+      compilers: {
+        js: babel
+      }
+    }));
+});
+
 
 // run 'scripts' task first, then watch for future changes
 gulp.task('default', ['images','styles','scripts','browser-sync'], function() {
