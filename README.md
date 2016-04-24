@@ -51,7 +51,7 @@ ReactDOM.render(<StorePicker/>, document.querySelector('#main'));
 ```
 
 
-#### Session 4
+#### Sessions 4 & 5
 Create react components (with static content)
 
 ##### JSX syntax
@@ -71,9 +71,21 @@ Create react components (with static content)
 ```
 Create application layout 
 
-*Good practices* : 
+##### Tips & Good practices 
 
 - Adjacent JSX elements must be wrapped in an enclosing tag 
+
+```
+  render: function () {
+    return (
+      <form className="store-selector">
+        <input type="text" ref="storeId" required/>
+        <input type="Submit"/>
+      </form>
+    )
+  }
+  ```
+  
 - Have expected corresponding JSX closing tag for <input> 
 - Use className instead of class in JSX
 ```
@@ -96,7 +108,7 @@ Create application layout
   }
 ```
 
-- Use of commments in JSX
+- Use of comments in JSX
 ```
   render : function() {
     return (
@@ -108,3 +120,4 @@ Create application layout
     )
   }
 ```
+
