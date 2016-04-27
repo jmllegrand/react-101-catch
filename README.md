@@ -246,6 +246,8 @@ gulp test
 
 #### Session 9: Events
 
+Specifics about react: you handle events inline 
+
 Use case: when a user click on the Submit of the StorePicker 
 
 - Define the event watched
@@ -259,8 +261,11 @@ Use case: when a user click on the Submit of the StorePicker
         <input type="Submit" />
       </form>
     )
-    
+   
 ```
+
+*this* refers to the component
+
 
 - Implement the event
 
@@ -296,9 +301,9 @@ Use case: programatically, force the change of the url
 
 ##### Tips & Good practices
 
-For a form, by default, it reload the page 
+For a form, by default, it reloads the page 
 
-To avoid this behavior, we need to prevent the form being submitting
+To avoid this behavior, we need to prevent the form from being submitting
 ```
   handleSubmit: function(event) {
     event.preventDefault();
@@ -306,3 +311,160 @@ To avoid this behavior, we need to prevent the form being submitting
   }
 ```
 
+#### Session 10 : State
+
+State is a fundamental concept in react (and all the fwks)
+
+- a representation of the components data, the master copy of the data 
+- in react, all the data is stored in an object not in html/dom (like jquery)
+
+The approach is the opposite: you don't modify the dom to change the description of a given item. 
+Instead, the state object changed. react will update to the change done
+whenever there is a reference to the state in the application, it will be automatically updated
+
+
+State for the application
+
+- Order 
+- List of fishes
+
+Use Cases: 
+
+- Add a fish object to the state 
+- Display the contents of the state (list of fish)
+
+
+##### Add an object to the state 
+
+The state is defined at the root application level (App level)
+We need a initial state (a blank object) on which we will add to it
+```
+var App = React.createClass({
+  getInitialState:function() {
+    return {
+      fishes: {},
+      order: {}
+    }
+});
+```
+
+It will run getInitialState() before the component is created
+
+
+We need a function addFish() to update the state
+```
+  addFish : function(fish) {
+    var timestamp = (new Date()).getTime();
+    // update the state object
+    this.state.fishes['fish-'+ timestamp] = fish;
+    // set the state
+    this.setState({fishes: this.state.fishes});
+  }
+ ```
+ This updates the state object. It is NOT sufficient for react to re-render the components
+ 
+ 
+```
+this.state.fishes['fish-'+ timestamp] = fish;
+
+```
+This will do the job, passing only the part of the object that has changed. You don't want to pass the 
+entire state.
+setState() is the primary method you use to trigger UI updates from event handlers and server request callbacks.
+```
+this.setState({fishes: this.state.fishes});
+```
+
+To invoke the addFish(), this will not work 
+
+```
+    App.addFish(fish);
+```
+To access addFish() defined in the App, we use props passing the method from its parents (App) to its children 
+(Inventory and AddFishForm)
+
+
+At the App level, addFish is declared as a props
+```
+var App = React.createClass({
+  getInitialState:function() {
+  },
+  addFish : function(fish) {
+  },
+  render: function () {
+    return (
+      <div className="catch-of-the-day">
+        <div className="menu">
+          <Header tagline="Fresh Seafood Market"/>
+        </div>
+        <Order/>
+        *<Inventory addFish = {this.addFish} />*
+      </div>
+    )
+  }
+});
+```
+
+At the Inventory level, addFish is (again) declared as a props
+
+```
+var Inventory = React.createClass({
+  render: function () {
+    return (
+      <div>
+        <h2>Inventory</h2>
+        <AddFishForm addFish = {this.props.addFish} ></AddFishForm>
+      </div>
+    )
+  }
+});
+```
+At the AddFishForm, we invoke the function
+
+```
+var AddFishForm = React.createClass({
+  addFish: function(event) {
+    console.log('AddFishForm.addFish()');
+
+    // 1- stop the form from submitting
+    event.preventDefault();
+
+    // 2- Take the data from the form and create an object
+    var fish = {
+      name: this.refs.name.value,
+      price: this.refs.price.value,
+      status: this.refs.status.value,
+      desc: this.refs.desc.value,
+      url: this.refs.url.value
+    };
+    console.log('fish', JSON.stringify(fish));
+
+    // 3- Add the fish to the application state (the tricky part)
+    // not concerned about the state of the AddFishForm but the state of the application
+    // how to get the data from AddFishForm to Inventory to App
+    this.props.addFish(fish);
+    this.refs.fishForm.reset();
+  }
+    
+```
+
+Note that is there are N functions properties to be passed from one to 3-4 levels in the components hierarchy,
+you can use *spread*
+
+```
+var Inventory = React.createClass({
+  render: function () {
+    return (
+      <div>
+        <h2>Inventory</h2>
+        <AddFishForm addFish = {...this.props} ></AddFishForm>
+      </div>
+    )
+  }
+});
+```
+##### Tips & Good practices (form)
+To reset a form, use reset()
+```
+    this.refs.fishForm.reset();
+```

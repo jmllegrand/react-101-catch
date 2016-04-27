@@ -12,6 +12,19 @@ var browserHistory = ReactRouter.browserHistory;
 var utils = require('./helpers');
 
 var App = React.createClass({
+  getInitialState:function() {
+    return {
+      fishes: {},
+      order: {}
+    }
+  },
+  addFish : function(fish) {
+    var timestamp = (new Date()).getTime();
+    // update the state object
+    this.state.fishes['fish-'+ timestamp] = fish;
+    // set the state
+    this.setState({fishes: this.state.fishes});
+  },
   render: function () {
     return (
       <div className="catch-of-the-day">
@@ -19,8 +32,49 @@ var App = React.createClass({
           <Header tagline="Fresh Seafood Market"/>
         </div>
         <Order/>
-        <Inventory/>
+        <Inventory addFish = {this.addFish} />
       </div>
+    )
+  }
+});
+
+var AddFishForm = React.createClass({
+  addFish: function(event) {
+    console.log('AddFishForm.addFish()');
+
+    // 1- stop the form from submitting
+    event.preventDefault();
+
+    // 2- Take the data from the form and create an object
+    var fish = {
+      name: this.refs.name.value,
+      price: this.refs.price.value,
+      status: this.refs.status.value,
+      desc: this.refs.desc.value,
+      url: this.refs.url.value
+    };
+    console.log('fish', JSON.stringify(fish));
+
+    // 3- Add the fish to the application state (the tricky part)
+    // not concerned about the state of the AddFishForm but the state of the application
+    // how to get the data from AddFishForm to Inventory to App
+    this.props.addFish(fish);
+    this.refs.fishForm.reset();
+  },
+  render: function() {
+    console.log('AddFishForm.render()');
+    return (
+      <form className="fish-edit" ref="fishForm" onSubmit={this.addFish}>
+        <input type="text" ref="name" placeholder="Fish Name"  />
+        <input type="text" ref="price" placeholder="Fish Price"  />
+        <select ref="status">
+          <option value="available">Fresh</option>
+          <option value="unavailable">Sold Out</option>
+        </select>
+        <textarea type="text" ref="desc" placeholder="Description"  />
+        <input type="text" ref="url" placeholder="URL to image"  />
+        <button type="submit" > Add Item </button>
+      </form>
     )
   }
 });
@@ -62,7 +116,8 @@ var Inventory = React.createClass({
   render: function () {
     return (
       <div>
-        <p>This is the Inventory component</p>
+        <h2>Inventory</h2>
+        <AddFishForm addFish = {this.props.addFish} ></AddFishForm>
       </div>
     )
   }
@@ -74,7 +129,7 @@ var StorePicker = React.createClass({
     console.log('this', this);
     event.preventDefault();
 
-    //get the data from the input
+    // get the data from the input
     var storeId = this.refs.storeId.value;
 
     // transition from StorePicker to App
