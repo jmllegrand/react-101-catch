@@ -10,6 +10,7 @@ var Route = ReactRouter.Route;
 var browserHistory = ReactRouter.browserHistory;
 
 var utils = require('./helpers');
+var fishes = require('./sample-fishes');
 
 var App = React.createClass({
   getInitialState:function() {
@@ -113,11 +114,19 @@ var Order = React.createClass({
 });
 
 var Inventory = React.createClass({
+  loadSampleFishes: function() {
+    console.log('Inventory.loadSampleFishes()');
+    for (var fish in fishes) {
+      console.log("fishes." + fish + " = " + JSON.stringify(fishes[fish]));
+      this.props.addFish(fishes[fish]);
+    }
+  },
   render: function () {
     return (
       <div>
         <h2>Inventory</h2>
         <AddFishForm addFish = {this.props.addFish} ></AddFishForm>
+        <button onClick={this.loadSampleFishes}>Load Sample fishes !</button>
       </div>
     )
   }
