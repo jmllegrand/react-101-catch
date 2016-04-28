@@ -468,3 +468,52 @@ To reset a form, use reset()
 ```
     this.refs.fishForm.reset();
 ```
+
+
+#### Session 11 : Loading data
+ 
+ USe Case: load data in the state based on the action of a button
+ 
+ 
+ Create a button with the onClick handler
+ 
+ ```
+ var Inventory = React.createClass({
+   render: function () {
+     return (
+       <div>
+         <h2>Inventory</h2>
+         <AddFishForm addFish = {this.props.addFish} ></AddFishForm>
+         <button onClick={this.loadSampleFishes}>Load Sample fishes !</button>
+       </div>
+     )
+   }
+ });
+ 
+ ```
+Implement loadSampleFishes()
+
+ ```
+    loadSampleFishes: function() {
+      console.log('Inventory.loadSampleFishes()');
+      for (var fish in fishes) {
+        console.log("fishes." + fish + " = " + JSON.stringify(fishes[fish]));
+        this.props.addFish(fishes[fish]);
+      }
+    }
+   
+ ```
+ 
+ A better approach would be to directly invoke setState() at the App level
+```
+  loadSampleFishes : function() {
+    this.setState({
+        fishes: require('./sample-fishes')
+    });
+  }
+ ```
+ 
+This would required to make public the loadSampleFishes at App level 
+
+- at Inventory level 
+- at AddFishForm level

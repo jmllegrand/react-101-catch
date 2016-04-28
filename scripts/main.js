@@ -116,8 +116,9 @@ var Order = React.createClass({
 var Inventory = React.createClass({
   loadSampleFishes: function() {
     console.log('Inventory.loadSampleFishes()');
+    console.log("fishes length", fishes.length);
     for (var fish in fishes) {
-      console.log("fishes." + fish + " = " + JSON.stringify(fishes[fish]));
+      console.log("fishes" + fish + " = " + JSON.stringify(fishes[fish]));
       this.props.addFish(fishes[fish]);
     }
   },
