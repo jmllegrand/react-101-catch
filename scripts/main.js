@@ -12,21 +12,19 @@ var browserHistory = ReactRouter.browserHistory;
 var utils = require('./helpers');
 var fishesDatas = require('./sample-fishes');
 
-var App;
-App = React.createClass({
+var App = React.createClass({
   getInitialState: function () {
     return {
       fishes: {},
       order: {}
     }
   },
-
   renderFish: function (key) {
     return (
-      <Fish key={key} index={key} details={this.state.fishes[key]} addFishToOrderState ={this.addFishToOrderState}/>
+      <Fish key={key} index={key} details={this.state.fishes[key]} addFishToOrderState={this.addFishToOrderState}/>
     )
   },
-  loadSampleFishes: function() {
+  loadSampleFishes: function () {
     this.setState({fishes: fishesDatas});
   },
   addFish: function (fish) {
@@ -37,11 +35,10 @@ App = React.createClass({
     this.setState({fishes: this.state.fishes});
   },
   addFishToOrderState: function (key) {
-    this.state.order[key] = this.state.order[key] + 1 || 1 ;
+    this.state.order[key] = this.state.order[key] + 1 || 1;
     // required to update html
     this.setState({order: this.state.order});
   },
-
   render: function () {
     return (
       <div className="catch-of-the-day">
@@ -53,7 +50,7 @@ App = React.createClass({
           </ul>
         </div>
         <Order/>
-        <Inventory addFish={this.addFish} loadSampleFishes={this.loadSampleFishes} />
+        <Inventory addFish={this.addFish} loadSampleFishes={this.loadSampleFishes}/>
       </div>
     )
   }
@@ -61,16 +58,16 @@ App = React.createClass({
 
 var Fish = React.createClass({
 
-  onClickAddToOrderEvent: function() {
+  onClickAddToOrderEvent: function () {
     this.props.addFishToOrderState(this.props.index);
   },
   render: function () {
     var details = this.props.details;
-    var isAvailable = details.status ==='available' ? true : false;
+    var isAvailable = details.status === 'available' ? true : false;
     var btnText = isAvailable ? 'Add To Order' : 'Sold Out!';
     return (
       <li className="menu-fish">
-        <img src={details.image} alt="" />
+        <img src={details.image} alt=""/>
         <h3 className="fish-name">
           {details.name}
           <span className="price">{utils.formatPrice(details.price)}</span>
@@ -81,7 +78,6 @@ var Fish = React.createClass({
     )
   }
 });
-
 
 var AddFishForm = React.createClass({
   addFish: function (event) {
@@ -123,7 +119,6 @@ var AddFishForm = React.createClass({
     )
   }
 });
-
 
 var Header = React.createClass({
   render: function () {
