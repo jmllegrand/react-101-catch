@@ -10,7 +10,7 @@ var Route = ReactRouter.Route;
 var browserHistory = ReactRouter.browserHistory;
 
 var utils = require('./helpers');
-var fishes = require('./sample-fishes');
+var fishesDatas = require('./sample-fishes');
 
 var App;
 App = React.createClass({
@@ -25,6 +25,9 @@ App = React.createClass({
     return (
       <Fish key={key} index={key} details={this.state.fishes[key]} addFishToOrderState ={this.addFishToOrderState}/>
     )
+  },
+  loadSampleFishes: function() {
+    this.setState({fishes: fishesDatas});
   },
   addFish: function (fish) {
     var timestamp = (new Date()).getTime();
@@ -50,7 +53,7 @@ App = React.createClass({
           </ul>
         </div>
         <Order/>
-        <Inventory addFish={this.addFish} />
+        <Inventory addFish={this.addFish} loadSampleFishes={this.loadSampleFishes} />
       </div>
     )
   }
@@ -155,20 +158,12 @@ var Order = React.createClass({
 });
 
 var Inventory = React.createClass({
-  loadSampleFishes: function () {
-    console.log('Inventory.loadSampleFishes()');
-    console.log("fishes length", fishes.length);
-    for (var fish in fishes) {
-      console.log("fishes" + fish + " = " + JSON.stringify(fishes[fish]));
-      this.props.addFish(fishes[fish]);
-    }
-  },
   render: function () {
     return (
       <div>
         <h2>Inventory</h2>
         <AddFishForm addFish={this.props.addFish}></AddFishForm>
-        <button onClick={this.loadSampleFishes}>Load Sample fishes !</button>
+        <button onClick={this.props.loadSampleFishes}>Load Sample fishes !</button>
       </div>
     )
   }
