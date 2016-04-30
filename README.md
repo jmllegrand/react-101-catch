@@ -513,7 +513,74 @@ Implement loadSampleFishes()
   }
  ```
  
-This would required to make public the loadSampleFishes at App level 
+This would required to pass loadSampleFishes() at App level via props 
 
 - at Inventory level 
 - at AddFishForm level
+
+
+
+#### Session 12 : Display data from the state
+
+  
+To loop over a list of items, jsx has no equivalent of ng-repeat a-la-angular but plain with using map()
+In our case, we have an object with properties
+We use Object.keys() to return an array of the object's properties
+```
+ <ul className="list-of-fishes">
+  {Object.keys(this.state.fishes)}
+ </ul>
+```
+From the arrray of keys, we will use map() to get an arrays of components
+```
+<ul className="list-of-fishes">
+  {Object.keys(this.state.fishes).map(this.renderFish)}
+</ul>
+```
+
+```
+renderFish: function(key) {
+ return (
+   <li>welcome {key} </li>
+ )
+}
+```
+A Fish component will be created to respect the modular approach 
+```
+  renderFish: function (key) {
+    return (
+      <Fish key={key} index={key} details={this.state.fishes[key]}/>
+    )
+  }
+```
+
+##### Tips & Good practices (for list)
+Whenever you are rendering a component in react, you need to pass a unique key property.
+The index property is required since you can't access the key property inside the component.
+
+
+You need to self close the img dedicated react element
+```
+ <img src={details.image} alt="" />
+```
+
+To simplify templating, you should create object 
+
+```
+var details = this.props.details;
+```
+
+You can to refer to it in the template
+```
+      <li className="menu-fish">
+        <img src={details.image} alt="" />
+        <h3 className="fish-name">
+          {details.name}
+          <span className="price">{utils.formatPrice(details.price)}</span>
+        </h3>
+        <p>{details.desc}</p>
+      </li>
+    )
+  }
+});
+```
