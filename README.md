@@ -584,3 +584,41 @@ You can to refer to it in the template
   }
 });
 ```
+
+
+#### Session 13 : Add a element (Fish reference) to a state property (Order)
+
+The same mechanism are used 
+
+- a event is triggered from an event handler
+
+```
+   <button disabled={!isAvailable} onClick={this.onClickAddToOrderEvent}>{btnText}</button>
+```
+- Definition of the event handler in the component itself
+```
+  onClickAddToOrderEvent: function() {
+    this.props.addFishToOrderState(this.props.index);
+  }
+```  
+- addFishToOrderState() has be defined at App level. The method is *exposed* to child components trough props
+
+```
+  renderFish: function (key) {
+    return (
+      <Fish key={key} index={key} details={this.state.fishes[key]} addFishToOrderState ={this.addFishToOrderState}/>
+    )
+  },
+```  
+ 
+
+##### Tips & Good practices (vanilla js)
+If this.state.order[key] is undefined, the foloowing expressin wil result in a NaN
+```
+this.state.order[key] = this.state.order[key] + 1 || 1 ;
+```
+
+The fix is the following 
+```
+this.state.order[key] = this.state.order[key] + 1 || 1 ;
+```

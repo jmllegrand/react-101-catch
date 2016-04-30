@@ -12,7 +12,8 @@ var browserHistory = ReactRouter.browserHistory;
 var utils = require('./helpers');
 var fishes = require('./sample-fishes');
 
-var App = React.createClass({
+var App;
+App = React.createClass({
   getInitialState: function () {
     return {
       fishes: {},
@@ -22,7 +23,7 @@ var App = React.createClass({
 
   renderFish: function (key) {
     return (
-      <Fish key={key} index={key} details={this.state.fishes[key]}/>
+      <Fish key={key} index={key} details={this.state.fishes[key]} addFishToOrderState ={this.addFishToOrderState}/>
     )
   },
   addFish: function (fish) {
@@ -32,6 +33,12 @@ var App = React.createClass({
     // set the state
     this.setState({fishes: this.state.fishes});
   },
+  addFishToOrderState: function (key) {
+    this.state.order[key] = this.state.order[key] + 1 || 1 ;
+    // required to update html
+    this.setState({order: this.state.order});
+  },
+
   render: function () {
     return (
       <div className="catch-of-the-day">
@@ -43,15 +50,21 @@ var App = React.createClass({
           </ul>
         </div>
         <Order/>
-        <Inventory addFish={this.addFish}/>
+        <Inventory addFish={this.addFish} />
       </div>
     )
   }
 });
 
 var Fish = React.createClass({
+
+  onClickAddToOrderEvent: function() {
+    this.props.addFishToOrderState(this.props.index);
+  },
   render: function () {
     var details = this.props.details;
+    var isAvailable = details.status ==='available' ? true : false;
+    var btnText = isAvailable ? 'Add To Order' : 'Sold Out!';
     return (
       <li className="menu-fish">
         <img src={details.image} alt="" />
@@ -60,6 +73,7 @@ var Fish = React.createClass({
           <span className="price">{utils.formatPrice(details.price)}</span>
         </h3>
         <p>{details.desc}</p>
+        <button disabled={!isAvailable} onClick={this.onClickAddToOrderEvent}>{btnText}</button>
       </li>
     )
   }
