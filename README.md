@@ -736,3 +736,47 @@ Limitation : it only works at the top level of the state object
                 
 Use of mixins (an array)
 
+
+#### Session 18 : Update & Delete state items
+
+ CRUD (Create / Read / Update / Delete) Principle
+ 
+ Last Use Case to cover: 
+ 
+ - Delete a fish
+ - Delete a item from the Order
+ 
+
+##### Tips & Good practices (form)
+
+Approach 1 - classical
+Define the event hadler 
+```
+        <button type="button" onClick={this.removeFish}> Remove Fish</button>
+```
+Create the implementation that invoke a function pass through props from App to Inventory to FishEditForm
+```
+  removeFish: function () {
+    console.log('JM - FishEditForm.removeFish()');
+    this.props.removeFishToFishesState(this.props.index);
+  }
+```  
+
+Approach 2 - classical
+
+Directly invoke the function on the event handler
+```
+        <button type="button" onClick={this.props.removeFishToFishesState.bind(null, this.props.index)}> Remove Fish</button>
+```
+
+##### Tips & Good practices (form)
+
+To avoid a page reload when using the onClick event handler, you need to pass *button* as the type
+
+```
+        <button type="button" onClick={this.removeFish}> Remove Fish</button>
+```
+
+The default value of "type" for a button is "submit", which self posts the form in your case and makes 
+it look like a refresh.
+            
