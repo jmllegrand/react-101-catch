@@ -626,7 +626,7 @@ this.state.order[key] = this.state.order[key] + 1 || 1 ;
 #### Session 14 : Display a element (Fish reference) from a state property (Order)
 TODO
 
-#### Session 15 : Using persistent data with firebase
+#### Session 15 : Using firebase to persist data
 
 
 Use cases:
@@ -690,4 +690,31 @@ JM - App.componentDidMount()
 The parameter of the url passed is available in props
 ```
 this.props.params.storeId
+```
+
+#### Session 16 : Using localstorage to persist data
+localStorage can be an option to persist data tied to a user
+
+Use case: 
+1) - any time the order is updated, the localStorage will be updated
+2) - bring localStorage content to the components when reloading the page
+
+For 1), we will used componentWillUpdate(), a method "invoked immediately before rendering when new props or state are being received"
+
+For 2), we use componentDidMount()
+
+##### Tips & Good practices (local storage)
+
+by default, localStorage i sbasic: you can only store string data
+```
+orderlong-jealous-knives	[object Object]
+```
+You need to use JSON.stringify
+```
+    localStorage.setItem('order-' + this.props.params.storeId, JSON.stringify(nextState.order));
+```
+
+This will result in the following
+```
+order-long-jealous-knives {"1":1,"3":2,"5":1}
 ```

@@ -29,6 +29,19 @@ var App = React.createClass({
       state: 'fishes',
       asArray: true
     });
+
+    var localStorageRef = localStorage.getItem('order-' + this.props.params.storeId);
+    if (localStorageRef) {
+      // need to update the state
+      this.setState({
+        order: JSON.parse(localStorageRef)
+      });
+    }
+  },
+  componentWillUpdate: function(nextProps, nextState) {
+    console.log("JM - App.componentWillUpdate()");
+    console.log(JSON.stringify(nextState));
+    localStorage.setItem('order-' + this.props.params.storeId, JSON.stringify(nextState.order));
   },
   renderFish: function (key) {
     return (
