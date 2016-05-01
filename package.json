@@ -35,6 +35,7 @@
     "gulp-util": "3.0.7",
     "mocha": "^2.4.5",
     "re-base": "^1.5.1",
+    "react-catalyst": "^0.3.0",
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0",
     "watchify": "3.4.0"

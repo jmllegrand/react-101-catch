@@ -718,3 +718,21 @@ This will result in the following
 ```
 order-long-jealous-knives {"1":1,"3":2,"5":1}
 ```
+
+
+#### Session 17 : bidirectionnal data flow using react catalyst
+
+by default, react is one way: you can only edit the state ; when the state changes, the components update
+
+you usually don't do bidirectionnal data management. IN the context of an inventory management sstem, it is useful
+ 
+Tool provided by react:  
+
+-linkState
+
+Limitation : it only works at the top level of the state object 
+
+- React Catalyst supports for deep path-based state access.
+                
+Use of mixins (an array)
+

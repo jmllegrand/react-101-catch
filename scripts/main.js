@@ -9,12 +9,15 @@ var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var browserHistory = ReactRouter.browserHistory;
 var Rebase = require('re-base');
-var base = Rebase.createClass('https://jml-catch-of-the-day.firebaseio.com/');
+var Base = Rebase.createClass('https://jml-catch-of-the-day.firebaseio.com/');
+var Catalyst = require('react-catalyst');
+
 
 var utils = require('./helpers');
 var fishesDatas = require('./sample-fishes');
 
 var App = React.createClass({
+  mixins: [Catalyst.LinkedStateMixin],
   getInitialState: function () {
     console.log("JM - App.getInitialState()");
     return {
@@ -22,9 +25,9 @@ var App = React.createClass({
       order: {}
     }
   },
-  componentDidMount: function() {
+  componentDidMount: function () {
     console.log("JM - App.componentDidMount()");
-    base.syncState(this.props.params.storeId + '/fishes', {
+    Base.syncState(this.props.params.storeId + '/fishes', {
       context: this,
       state: 'fishes',
       asArray: true
@@ -38,7 +41,7 @@ var App = React.createClass({
       });
     }
   },
-  componentWillUpdate: function(nextProps, nextState) {
+  componentWillUpdate: function (nextProps, nextState) {
     console.log("JM - App.componentWillUpdate()");
     console.log(JSON.stringify(nextState));
     localStorage.setItem('order-' + this.props.params.storeId, JSON.stringify(nextState.order));
@@ -64,6 +67,7 @@ var App = React.createClass({
     this.setState({order: this.state.order});
   },
   render: function () {
+    console.log('JM - App.render()');
     return (
       <div className="catch-of-the-day">
         <div className="menu">
@@ -73,8 +77,8 @@ var App = React.createClass({
             {Object.keys(this.state.fishes).map(this.renderFish)}
           </ul>
         </div>
-        <Order fishes = {this.state.fishes} orderItems = {this.state.order}/>
-        <Inventory addFish={this.addFish} loadSampleFishes={this.loadSampleFishes}/>
+        <Order fishes={this.state.fishes} orderItems={this.state.order}/>
+        <Inventory linkState={this.linkState} fishes={this.state.fishes} addFish={this.addFish} loadSampleFishes={this.loadSampleFishes}/>
       </div>
     )
   }
@@ -86,6 +90,7 @@ var Fish = React.createClass({
     this.props.addFishToOrderState(this.props.index);
   },
   render: function () {
+    console.log('JM - Fish.render()');
     var details = this.props.details;
     var isAvailable = details.status === 'available' ? true : false;
     var btnText = isAvailable ? 'Add To Order' : 'Sold Out!';
@@ -165,7 +170,7 @@ var Header = React.createClass({
 });
 
 var Order = React.createClass({
-  displayOrderItem: function(item){
+  displayOrderItem: function (item) {
     var orderItems = this.props.orderItems;
     var fishes = this.props.fishes;
     return (
@@ -173,10 +178,11 @@ var Order = React.createClass({
         <span>{orderItems[item]} lb(s)</span>
         <span>{fishes[item].name}</span>
         <span className="price">{utils.formatPrice(orderItems[item] * fishes[item].price)}</span>
-       </li>
+      </li>
     )
   },
   render: function () {
+
     var ordersId = Object.keys(this.props.orderItems);
     var orderItems = this.props.orderItems;
     var fishes = this.props.fishes;
@@ -186,11 +192,11 @@ var Order = React.createClass({
     //TODO: handle the 0 & 1 situations within the reduce()
     if (ordersId.length === 0) {
       totalAmount = 0
-    } else if (ordersId.length === 1){
+    } else if (ordersId.length === 1) {
       totalAmount = orderItems[ordersId[0]] * fishes[ordersId[0]].price
-    } else if (ordersId.length > 1){
-       totalAmount = ordersId.reduce(function(previousValue, currentValue, currentIndex){
-         return (previousValue + orderItems[currentValue] * fishes[currentValue].price) ;
+    } else if (ordersId.length > 1) {
+      totalAmount = ordersId.reduce(function (previousValue, currentValue) {
+        return (previousValue + orderItems[currentValue] * fishes[currentValue].price);
       }, 0);
     }
     return (
@@ -209,16 +215,47 @@ var Order = React.createClass({
 });
 
 var Inventory = React.createClass({
+  renderEditFishForm: function (key) {
+    return <FishEditForm linkState={this.props.linkState} key={key} index={key} fishes={this.props.fishes}/>
+  },
   render: function () {
+    console.log('JM - Inventory.render()');
     return (
       <div>
         <h2>Inventory</h2>
-        <AddFishForm addFish={this.props.addFish}></AddFishForm>
+
+        <ul className="list-of-fishes">
+          {Object.keys(this.props.fishes).map(this.renderEditFishForm)}
+        </ul>
+
+
+        <AddFishForm addFish={this.props.addFish} />
         <button onClick={this.props.loadSampleFishes}>Load Sample fishes !</button>
       </div>
     )
   }
 });
+
+
+var FishEditForm = React.createClass({
+  render: function () {
+    console.log('JM - FishEditForm.render()');
+    return (
+      <form className="fish-edit" ref="fishForm" onSubmit={this.remove}>
+        <input type="text"  valueLink={this.props.linkState('fishes.' + this.props.index + '.name')}/>
+        <input type="text" valueLink={this.props.linkState('fishes.' + this.props.index + '.price')} />
+        <select valueLink={this.props.linkState('fishes.' + this.props.index + '.status')} >
+          <option value="available">Fresh</option>
+          <option value="unavailable">Sold Out</option>
+        </select>
+        <textarea type="text" valueLink={this.props.linkState('fishes.' + this.props.index + '.desc')} />
+        <input type="text" valueLink={this.props.linkState('fishes.' + this.props.index + '.image')}/>
+        <button type="submit"> Remove Fish</button>
+      </form>
+    )
+  }
+});
+
 
 var StorePicker = React.createClass({
   handleSubmit: function (event) {
@@ -232,6 +269,7 @@ var StorePicker = React.createClass({
     browserHistory.push('/store/' + storeId);
   },
   render: function () {
+    console.log('JM - StorePicker.render()');
     var name = "JM";
     return (
       <form className="store-selector" onSubmit={this.handleSubmit}>
