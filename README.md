@@ -622,3 +622,72 @@ The fix is the following
 ```
 this.state.order[key] = this.state.order[key] + 1 || 1 ;
 ```
+
+#### Session 14 : Display a element (Fish reference) from a state property (Order)
+TODO
+
+#### Session 15 : Using persistent data with firebase
+
+
+Use cases:
+- Save & fetch data
+- Update components data based on changes done on the backend
+
+Firebase (from google) features:
+
+- store data in the cloud
+- handle authentification / security
+- easy to use to sync react single state object with firebase object  
+- using web-socket combined with pub/sub model
+
+
+Tooling 
+
+- the standard default firebase tool is reactFire, not the best option when working with the flux pattern
+- Re-base (https://github.com/tylermcginnis/re-base) you only have to manage the state changes and re-base will handle the rest on firebase 
+
+
+To make it works (asssuming the library has been loaded)
+
+
+- define a reference to the firebase database
+
+```
+var base = Rebase.createClass('https://jml-catch-of-the-day.firebaseio.com/');
+
+```
+
+- sync the firebase database with the state fishes in the App component using syncState()
+```
+  componentDidMount: function() {
+    console.log("JM - App.componentDidMount()");
+    base.syncState(this.props.params.storeId + 'fishes', {
+      context: this,
+      state: 'fishes',
+      asArray: true
+    });
+  },
+```
+If anyone od the 2 changes, the other will get updated
+
+##### Tips & Good practices (react lifecycle)
+
+React lifecycle methods, "various methods executed at specific points in a component's lifecycle"
+
+componentDidMount() is "invoked once, only on the client (not on the server), immediately after the initial rendering occurs"
+
+This is the sequence of actions once the user clicks on the submit of the storePicker
+```
+JM - StorePicker.handleSubmit()
+JM - App.getInitialState()
+JM - Header.render()
+JM - AddFishForm.render()
+JM - App.componentDidMount()
+```
+
+##### Tips & Good practices (react router)
+
+The parameter of the url passed is available in props
+```
+this.props.params.storeId
+```

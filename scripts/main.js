@@ -8,16 +8,27 @@ var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var browserHistory = ReactRouter.browserHistory;
+var Rebase = require('re-base');
+var base = Rebase.createClass('https://jml-catch-of-the-day.firebaseio.com/');
 
 var utils = require('./helpers');
 var fishesDatas = require('./sample-fishes');
 
 var App = React.createClass({
   getInitialState: function () {
+    console.log("JM - App.getInitialState()");
     return {
       fishes: {},
       order: {}
     }
+  },
+  componentDidMount: function() {
+    console.log("JM - App.componentDidMount()");
+    base.syncState(this.props.params.storeId + '/fishes', {
+      context: this,
+      state: 'fishes',
+      asArray: true
+    });
   },
   renderFish: function (key) {
     return (
@@ -94,7 +105,7 @@ var AddFishForm = React.createClass({
       desc: this.refs.desc.value,
       url: this.refs.url.value
     };
-    console.log('fish', JSON.stringify(fish));
+    console.log('JM - fish', JSON.stringify(fish));
 
     // 3- Add the fish to the application state (the tricky part)
     // not concerned about the state of the AddFishForm but the state of the application
@@ -103,7 +114,7 @@ var AddFishForm = React.createClass({
     this.refs.fishForm.reset();
   },
   render: function () {
-    console.log('AddFishForm.render()');
+    console.log('JM - AddFishForm.render()');
     return (
       <form className="fish-edit" ref="fishForm" onSubmit={this.addFish}>
         <input type="text" ref="name" placeholder="Fish Name"/>
@@ -122,9 +133,7 @@ var AddFishForm = React.createClass({
 
 var Header = React.createClass({
   render: function () {
-    console.log('Header.render()');
-    console.log('this', this);
-    console.log('this.props', this.props);
+    console.log('JM - Header.render()');
     return (
       <header className="top">
         <h1> Catch
@@ -200,8 +209,7 @@ var Inventory = React.createClass({
 
 var StorePicker = React.createClass({
   handleSubmit: function (event) {
-    console.log('in handleSubmit()');
-    console.log('this', this);
+    console.log('JM - StorePicker.handleSubmit()');
     event.preventDefault();
 
     // get the data from the input
