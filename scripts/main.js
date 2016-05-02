@@ -11,6 +11,7 @@ var browserHistory = ReactRouter.browserHistory;
 var Rebase = require('re-base');
 var Base = Rebase.createClass('https://jml-catch-of-the-day.firebaseio.com/');
 var Catalyst = require('react-catalyst');
+var CSSTransitionGroup = require('react-addons-css-transition-group');
 
 
 var utils = require('./helpers');
@@ -64,7 +65,7 @@ var App = React.createClass({
     });
   },
   removeFishFromFishesState: function (key) {
-    if(confirm('Are you sure you want to remove the fish')) {
+    if (confirm('Are you sure you want to remove the fish')) {
       // update the state object
       delete this.state.fishes[key];
       // trigger the re-render
@@ -101,7 +102,7 @@ var App = React.createClass({
         <Order
           fishes={this.state.fishes}
           orderItems={this.state.order}
-          removeFishFromOrderState = {this.removeFishFromOrderState}
+          removeFishFromOrderState={this.removeFishFromOrderState}
         />
         <Inventory
           removeFishFromFishesState={this.removeFishFromFishesState}
@@ -203,16 +204,23 @@ var Order = React.createClass({
   displayOrderItem: function (item) {
     var orderItems = this.props.orderItems;
     var fishes = this.props.fishes;
-    var removeButton = <button onClick={this.props.removeFishFromOrderState.bind(null, item)}>&times</button>;
+    var removeButton = <button onClick={this.props.removeFishFromOrderState.bind(null, item)}>&times;</button>;
 
     // TODO 1: externalize the component when available
     // TODO 2: create a component 'sorry fish no longer available'
     return (
       <li key={item} index={item}>
-        <span>{orderItems[item]} lb(s)</span>
-        <span>{fishes[item].name}</span>
+        <span>
+          <CSSTransitionGroup
+            component="span"
+            transitionName="count"
+            transitionEnterTimeout={250}
+            transitionLeaveTimeout={250}>
+            <span key={orderItems[item]}> {orderItems[item]} </span>
+          </CSSTransitionGroup>
+          <span> lb(s) {fishes[item].name} {removeButton}</span>
+        </span>
         <span className="price">{utils.formatPrice(orderItems[item] * fishes[item].price)}</span>
-        {removeButton}
       </li>
     )
   },
@@ -236,14 +244,20 @@ var Order = React.createClass({
     }
     return (
       <div className="order-wrap">
-        <h2>Your Order</h2>
-        <ul className="order">
+        <h2 className="order-title">Your Order</h2>
+        <CSSTransitionGroup
+          className="order"
+          component="ul"
+          transitionName="order"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
+        >
           {ordersId.map(this.displayOrderItem)}
           <li className="total">
             <strong>Total:</strong>
             {utils.formatPrice(totalAmount)}
           </li>
-        </ul>
+        </CSSTransitionGroup>
       </div>
     )
   }
@@ -290,7 +304,8 @@ var FishEditForm = React.createClass({
         </select>
         <textarea type="text" valueLink={this.props.linkState('fishes.' + this.props.index + '.desc')}/>
         <input type="text" valueLink={this.props.linkState('fishes.' + this.props.index + '.image')}/>
-        <button type="button" onClick={this.props.removeFishFromFishesState.bind(null, this.props.index)}> Remove Fish</button>
+        <button type="button" onClick={this.props.removeFishFromFishesState.bind(null, this.props.index)}> Remove Fish
+        </button>
       </form>
     )
   }

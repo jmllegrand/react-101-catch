@@ -780,3 +780,6 @@ To avoid a page reload when using the onClick event handler, you need to pass *b
 The default value of "type" for a button is "submit", which self posts the form in your case and makes 
 it look like a refresh.
             
+#### Session 19 : CSS & Animation
+
+use of stylus, equivalent to SAAS wo coluns & semi colons
