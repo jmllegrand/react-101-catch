@@ -783,3 +783,32 @@ it look like a refresh.
 #### Session 19 : CSS & Animation
 
 use of stylus, equivalent to SAAS wo coluns & semi colons
+
+
+#### Session 20 : proptypes
+
+Proptypes are validation for the resilient components
+
+It validates any property type
+
+To ensure that the user of the component will use string tor the tagline (and not number nor function)
+```
+           <Header tagline="Fresh Seafood Market"/>
+```
+we define the following propTypes
+```
+  propTypes : {
+    tagline: React.PropTypes.string.isRequired
+  }
+```
+
+If no tagline is provided, the following error is shown
+
+```
+Failed propType: Required prop `tagline` was not specified in `Header`. Check the render method of `App`.
+```
+
+
+##### Tips & Good practices (react)
+
+For any prop created at a component, have the corresponding propType

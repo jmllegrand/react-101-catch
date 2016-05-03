@@ -22,7 +22,7 @@ var App = React.createClass({
   getInitialState: function () {
     console.log("JM - App.getInitialState()");
     return {
-      fishes: {},
+      fishes: [],
       order: {}
     }
   },
@@ -49,11 +49,16 @@ var App = React.createClass({
   },
   renderFish: function (key) {
     return (
-      <Fish key={key} index={key} details={this.state.fishes[key]} addFishToOrderState={this.addFishToOrderState}/>
+      <Fish
+        key={key} index={key}
+        details={this.state.fishes[key]}
+        addFishToOrderState={this.addFishToOrderState}/>
     )
   },
   loadSampleFishes: function () {
-    this.setState({fishes: fishesDatas});
+    this.setState({
+      fishes: fishesDatas
+    });
   },
   addFishToFishesState: function (fish) {
     var timestamp = (new Date()).getTime();
@@ -136,6 +141,11 @@ var Fish = React.createClass({
         <button disabled={!isAvailable} onClick={this.onClickAddToOrderEvent}>{btnText}</button>
       </li>
     )
+  },
+  propTypes: {
+    index: React.PropTypes.string.isRequired,
+    details: React.PropTypes.object.isRequired,
+    addFishToOrderState: React.PropTypes.func.isRequired
   }
 });
 
@@ -177,6 +187,9 @@ var AddFishForm = React.createClass({
         <button type="submit"> Add Item</button>
       </form>
     )
+  },
+  propTypes: {
+    //addFishToFishesState: React.PropTypes.func.isRequired
   }
 });
 
@@ -197,6 +210,9 @@ var Header = React.createClass({
         </h3>
       </header>
     )
+  },
+  propTypes: {
+    tagline: React.PropTypes.string.isRequired
   }
 });
 
@@ -260,6 +276,11 @@ var Order = React.createClass({
         </CSSTransitionGroup>
       </div>
     )
+  },
+  propTypes: {
+    fishes: React.PropTypes.array.isRequired,
+    orderItems: React.PropTypes.object.isRequired,
+    removeFishFromOrderState: React.PropTypes.func.isRequired
   }
 });
 
@@ -279,10 +300,17 @@ var Inventory = React.createClass({
         <ul className="list-of-fishes">
           {Object.keys(this.props.fishes).map(this.renderEditFishForm)}
         </ul>
-        <AddFishForm addFish={this.props.addFishToFishesState}/>
+        <AddFishForm addFishToFishesState={this.props.addFishToFishesState}/>
         <button onClick={this.props.loadSampleFishes}>Load Sample fishes !</button>
       </div>
     )
+  },
+  propTypes: {
+    removeFishFromFishesState: React.PropTypes.func.isRequired,
+    linkState: React.PropTypes.func.isRequired,
+    fishes: React.PropTypes.array.isRequired,
+    addFish: React.PropTypes.func.isRequired,
+    loadSampleFishes: React.PropTypes.func.isRequired
   }
 });
 
