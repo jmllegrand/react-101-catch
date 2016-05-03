@@ -812,3 +812,39 @@ Failed propType: Required prop `tagline` was not specified in `Header`. Check th
 ##### Tips & Good practices (react)
 
 For any prop created at a component, have the corresponding propType
+
+
+#### Session 21 & 22:  es6
+
+es6 adding a bunch of nice features 
+
+a react application is build in es6 
+- modules 
+- es6 classes
+
+Babel takes es6 code and crash es5 code - the standard tool 
+facebook.com is compiled by babel 
+
+
+##### Tips & Good practices (react)
+
+Have each component in its classes 
+
+
+Step 0 - start with modules
+ 
+Instead of having the nodejs require 
+
+```
+var  NotFound = require ('./components/NotFound');
+```
+We use the es6 import
+```
+import NotFound from './components/NotFound';
+```
+
+Destructuring feature
+
+```
+import {Router, Route, browserHistory } from 'react-router';
+```
