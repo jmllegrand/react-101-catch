@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {browserHistory} from 'react-router';
-import utils from '../helpers';
+import utils from '../common/helpers';
 import autobind from 'autobind-decorator'
 
 

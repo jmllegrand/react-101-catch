@@ -897,7 +897,8 @@ Using es5 style with createClass
   
   
 Using es6 style with extends Component
-  ```
+
+```
   constructor () {
     console.log("JM - App.constructor()");
     super();
@@ -906,14 +907,15 @@ Using es6 style with extends Component
       order: {}
     }
   }
-    ```
-  
+```
+
 Introduction of constructor that will run once when the class is instantiated
 
 Gotcha 
 
 anytime we are referring to *this*, it refers to React.Component. 
 *this.linkState* is not defined to Component as it does not yet exist
+
 ```
         <Inventory
           removeFishFromFishesState={this.removeFishFromFishesState}
@@ -924,6 +926,7 @@ anytime we are referring to *this*, it refers to React.Component.
 ```
 
 solution 
+
 ```
 linkState={this.linkState.bind(this)
 ```

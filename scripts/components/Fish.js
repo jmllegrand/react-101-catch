@@ -4,7 +4,7 @@
 
 
 import React from 'react';
-import utils from '../helpers';
+import utils from '../common/helpers';
 import autobind from 'autobind-decorator';
 
 

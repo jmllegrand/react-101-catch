@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import utils from '../helpers';
+import utils from '../common/helpers';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import autobind from 'autobind-decorator';
 

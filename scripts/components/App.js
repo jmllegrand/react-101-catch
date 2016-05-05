@@ -9,7 +9,7 @@ import Header from './Header';
 import Order from './Order';
 import Inventory from './Inventory';
 import Fish from './Fish';
-import fishesDatas from '../sample-fishes';
+import fishesDatas from '../data/sample-fishes';
 import reactMixins from 'react-mixin';
 import autobind from 'autobind-decorator';
 
