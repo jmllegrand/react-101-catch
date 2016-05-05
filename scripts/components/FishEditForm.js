@@ -3,14 +3,17 @@
  */
 
 import React from 'react';
+import autobind from 'autobind-decorator';
 
 
-export default React.createClass({
-  removeFish: function () {
+class FishEditForm extends React.Component {
+  @autobind
+  removeFish() {
     console.log('JM - FishEditForm.removeFish()');
     this.props.removeFishFromFishesState(this.props.index);
-  },
-  render: function () {
+  }
+
+  render() {
     console.log('JM - FishEditForm.render()');
     return (
       <form className="fish-edit" ref="fishForm">
@@ -27,4 +30,6 @@ export default React.createClass({
       </form>
     )
   }
-});
+}
+
+export default FishEditForm;

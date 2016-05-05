@@ -5,13 +5,16 @@
 
 import React from 'react';
 import utils from '../helpers';
+import autobind from 'autobind-decorator';
 
-export default React.createClass({
 
-  onClickAddToOrderEvent: function () {
+class Fish extends React.Component {
+  @autobind
+  onClickAddToOrderEvent() {
     this.props.addFishToOrderState(this.props.index);
-  },
-  render: function () {
+  }
+
+  render() {
     console.log('JM - Fish.render()');
     var details = this.props.details;
     var isAvailable = details.status === 'available';
@@ -27,10 +30,14 @@ export default React.createClass({
         <button disabled={!isAvailable} onClick={this.onClickAddToOrderEvent}>{btnText}</button>
       </li>
     )
-  },
-  propTypes: {
-    index: React.PropTypes.string.isRequired,
-    details: React.PropTypes.object.isRequired,
-    addFishToOrderState: React.PropTypes.func.isRequired
   }
-});
+}
+
+
+Fish.propTypes = {
+  index: React.PropTypes.string.isRequired,
+  details: React.PropTypes.object.isRequired,
+  addFishToOrderState: React.PropTypes.func.isRequired
+};
+
+export default Fish;

@@ -848,3 +848,82 @@ Destructuring feature
 ```
 import {Router, Route, browserHistory } from 'react-router';
 ```
+
+#### Session 23:  introduce classes
+
+#### Session 25:  introduce autobind decoractor
+
+To use es7 features like the autobind, the gulp configuation file has to be change 
+```
+    transform:  [babelify.configure({stage : 0 })]
+
+```
+
+autobind can be made turn on 
+ 
+- at the method level 
+
+```
+  @autobind
+  handleSubmit(event) {
+  }
+```
+
+- at the class level 
+
+```
+  @autobind
+  class StorePicker extends React.Component {
+  }
+```
+
+#### Session 27: handle state
+
+```
+warning.js:44 Warning: getInitialState was defined on App, a plain JavaScript class. This is only supported for classes created using React.createClass. 
+Did you mean to define a state property instead?
+```
+
+Using es5 style with createClass
+```
+  getInitialState() {
+    console.log("JM - App.getInitialState()");
+    return {
+      fishes: [],
+      order: {}
+    }
+  }
+ ```
+  
+  
+Using es6 style with extends Component
+  ```
+  constructor () {
+    console.log("JM - App.constructor()");
+    super();
+    this.state = {
+      fishes: [],
+      order: {}
+    }
+  }
+    ```
+  
+Introduction of constructor that will run once when the class is instantiated
+
+Gotcha 
+
+anytime we are referring to *this*, it refers to React.Component. 
+*this.linkState* is not defined to Component as it does not yet exist
+```
+        <Inventory
+          removeFishFromFishesState={this.removeFishFromFishesState}
+          linkState={this.linkState}
+          fishes={this.state.fishes}
+          addFish={this.addFishToFishesState}
+          loadSampleFishes={this.loadSampleFishes}/>
+```
+
+solution 
+```
+linkState={this.linkState.bind(this)
+```

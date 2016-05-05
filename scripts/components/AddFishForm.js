@@ -3,10 +3,13 @@
  */
 
 import React from 'react';
+import autobind from 'autobind-decorator';
 
 
-export default React.createClass({
-  addFish: function (event) {
+class AddFishForm extends React.Component {
+
+  @autobind
+  addFish(event) {
     console.log('AddFishForm.addFish()');
 
     // 1- stop the form from submitting
@@ -27,8 +30,9 @@ export default React.createClass({
     // how to get the data from AddFishForm to Inventory to App
     this.props.addFishToFishesState(fish);
     this.refs.fishForm.reset();
-  },
-  render: function () {
+  }
+
+  render() {
     console.log('JM - AddFishForm.render()');
     return (
       <form className="fish-edit" ref="fishForm" onSubmit={this.addFish}>
@@ -43,8 +47,11 @@ export default React.createClass({
         <button type="submit"> Add Item</button>
       </form>
     )
-  },
-  propTypes: {
-    //addFishToFishesState: React.PropTypes.func.isRequired
   }
-});
+}
+
+AddFishForm.propTypes = {
+  //addFishToFishesState: React.PropTypes.func.isRequired
+};
+
+export default AddFishForm;

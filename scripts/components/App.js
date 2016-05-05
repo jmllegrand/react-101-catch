@@ -9,28 +9,31 @@ import Header from './Header';
 import Order from './Order';
 import Inventory from './Inventory';
 import Fish from './Fish';
+import fishesDatas from '../sample-fishes';
+import reactMixins from 'react-mixin';
+import autobind from 'autobind-decorator';
 
 var Base = Rebase.createClass('https://jml-catch-of-the-day.firebaseio.com/');
-var fishesDatas = require('../sample-fishes');
 
+@autobind
+class App extends React.Component {
 
-export default React.createClass({
-  mixins: [Catalyst.LinkedStateMixin],
-  getInitialState: function () {
-    console.log("JM - App.getInitialState()");
-    return {
+  constructor() {
+    console.log("JM - App.constructor()");
+    super();
+    this.state = {
       fishes: [],
       order: {}
     }
-  },
-  componentDidMount: function () {
+  }
+
+  componentDidMount() {
     console.log("JM - App.componentDidMount()");
     Base.syncState(this.props.params.storeId + '/fishes', {
       context: this,
       state: 'fishes',
       asArray: true
     });
-
     var localStorageRef = localStorage.getItem('order-' + this.props.params.storeId);
     if (localStorageRef) {
       // need to update the state
@@ -38,26 +41,30 @@ export default React.createClass({
         order: JSON.parse(localStorageRef)
       });
     }
-  },
-  componentWillUpdate: function (nextProps, nextState) {
+  }
+
+  componentWillUpdate(nextProps, nextState) {
     console.log("JM - App.componentWillUpdate()");
     console.log(JSON.stringify(nextState));
     localStorage.setItem('order-' + this.props.params.storeId, JSON.stringify(nextState.order));
-  },
-  renderFish: function (key) {
+  }
+
+  renderFish(key) {
     return (
       <Fish
         key={key} index={key}
         details={this.state.fishes[key]}
         addFishToOrderState={this.addFishToOrderState}/>
     )
-  },
-  loadSampleFishes: function () {
+  }
+
+  loadSampleFishes() {
     this.setState({
       fishes: fishesDatas
     });
-  },
-  addFishToFishesState: function (fish) {
+  }
+
+  addFishToFishesState(fish) {
     var timestamp = (new Date()).getTime();
     // update the state object
     this.state.fishes['fish-' + timestamp] = fish;
@@ -65,8 +72,9 @@ export default React.createClass({
     this.setState({
       fishes: this.state.fishes
     });
-  },
-  removeFishFromFishesState: function (key) {
+  }
+
+  removeFishFromFishesState(key) {
     if (confirm('Are you sure you want to remove the fish')) {
       // update the state object
       delete this.state.fishes[key];
@@ -75,22 +83,25 @@ export default React.createClass({
         fishes: this.state.fishes
       });
     }
-  },
-  addFishToOrderState: function (key) {
+  }
+
+  addFishToOrderState(key) {
     this.state.order[key] = this.state.order[key] + 1 || 1;
     // required to update html
     this.setState({
       order: this.state.order
     });
-  },
-  removeFishFromOrderState: function (key) {
+  }
+
+  removeFishFromOrderState(key) {
     delete this.state.order[key];
     // required to update html
     this.setState({
       order: this.state.order
     });
-  },
-  render: function () {
+  }
+
+  render() {
     console.log('JM - App.render()');
     return (
       <div className="catch-of-the-day">
@@ -108,11 +119,16 @@ export default React.createClass({
         />
         <Inventory
           removeFishFromFishesState={this.removeFishFromFishesState}
-          linkState={this.linkState}
+          linkState={this.linkState.bind(this)}
           fishes={this.state.fishes}
           addFish={this.addFishToFishesState}
           loadSampleFishes={this.loadSampleFishes}/>
       </div>
     )
   }
-});
+}
+
+reactMixins.onClass(App, Catalyst.LinkedStateMixin);
+
+
+export default App;

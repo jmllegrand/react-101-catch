@@ -6,21 +6,26 @@
 import React from 'react';
 import {browserHistory} from 'react-router';
 import utils from '../helpers';
+import autobind from 'autobind-decorator'
 
 
-export default  React.createClass({
-  handleSubmit: function (event) {
+class StorePicker extends React.Component {
+  @autobind
+  handleSubmit(event) {
     console.log('JM - StorePicker.handleSubmit()');
     event.preventDefault();
 
+    console.log('JM - This in handleSubmit() ', this);
     // get the data from the input
     var storeId = this.refs.storeId.value;
 
     // transition from StorePicker to App
     browserHistory.push('/store/' + storeId);
-  },
-  render: function () {
+  }
+
+  render() {
     console.log('JM - StorePicker.render()');
+    console.log('JM - This in render() ', this);
     var name = "JM";
     return (
       <form className="store-selector" onSubmit={this.handleSubmit}>
@@ -31,4 +36,6 @@ export default  React.createClass({
       </form>
     )
   }
-});
+}
+
+export default StorePicker;
